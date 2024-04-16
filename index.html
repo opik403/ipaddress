@@ -79,10 +79,16 @@
     <span class=value id=resTotalHosts></span>
 </div>
 
+<div class='result'>
+    <span class=label>Total Hosts:</span>
+    <span class=value id=resTotalHosts></span>
+</div>
+<div id="ipTable"></div>
+
 </body>
     <script type='text/javascript'>
         function calculate(){
-        //get values from input box
+//get values from input box
 var q1=document.getElementById('q1').value;
 var q2=document.getElementById('q2').value;
 var q3=document.getElementById('q3').value;
@@ -96,7 +102,7 @@ if(
 (q3>=0 && q3<=255) &&
 (q4>=0 && q4<=255) &&
 (cidr>=0 && cidr<=32)
-){
+) {
 
 //display IP address
 document.getElementById('resIP').innerHTML=q1 + "." + q2 + "." + q3 + "." + q4;
@@ -106,6 +112,26 @@ var totalHosts = Math.pow(2, 32 - parseInt(cidr, 10)) - 2;
 
 // display total hosts
 document.getElementById('resTotalHosts').innerHTML = totalHosts;
+
+// generate IP list
+var ipList = generateIPList(q1, q2, q3, q4, cidr);
+
+// display IP list in table
+displayIPList(ipList);
+
+// get IP Address binaries and other calculations...
+} else {
+alert("invalid value");
+}
+
+function displayIPList(ipList) {
+var table = "<table><tr><th>Network Address</th><th>Usable Host Range</th><th>Broadcast Address</th></tr>";
+ipList.forEach(function (ip) {
+table += "<tr><td>" + ip.network + "</td><td>" + ip.range + "</td><td>" + ip.broadcast + "</td></tr>";
+});
+    table += "</table>";
+    document.getElementById('ipTable').innerHTML = table;
+}
 
 //get IP Address binaries
 var ipBin={};
@@ -230,7 +256,25 @@ document.getElementById('resClass').innerHTML=standartClass;
 }else{
 alert("invalid value");
 }
+
+// Tambahkan fungsi baru untuk menghasilkan daftar IP untuk setiap subnet
+function generateIPList(q1, q2, q3, q4, cidr) {
+    var ipList = [];
+    var subnetMask = Math.pow(2, 32 - cidr);
+    var currentIP = q1 + "." + q2 + "." + q3 + "." + q4;
+    var startIP = currentIP.split(".");
+    for (var i = 0; i < subnetMask; i++) {
+        ipList.push({
+            network: currentIP,
+            range: currentIP,
+            broadcast: currentIP
+        });
+        startIP[3] = parseInt(startIP[3]) + 1;
+        currentIP = startIP.join(".");
+    }
+    return ipList;
         }
+}
         </script>
 
 </html>
