@@ -120,9 +120,27 @@ var ipList = generateIPList(q1, q2, q3, q4, cidr);
 displayIPList(ipList);
 
 // get IP Address binaries and other calculations...
-// } else {
-// alert("invalid value");
-// }
+} else {
+alert("invalid value");
+}
+
+// Tambahkan fungsi baru untuk menghasilkan daftar IP untuk setiap subnet
+function generateIPList(q1, q2, q3, q4, cidr) {
+    var ipList = [];
+    var subnetMask = Math.pow(2, 32 - cidr);
+    var currentIP = q1 + "." + q2 + "." + q3 + "." + q4;
+    var startIP = currentIP.split(".");
+    for (var i = 0; i < subnetMask; i++) {
+        ipList.push({
+            network: currentIP,
+            range: currentIP,
+            broadcast: currentIP
+        });
+        startIP[3] = parseInt(startIP[3]) + 1;
+        currentIP = startIP.join(".");
+    }
+    return ipList;
+        }
 
 function displayIPList(ipList) {
 var table = "<table><tr><th>Network Address</th><th>Usable Host Range</th><th>Broadcast Address</th></tr>";
@@ -255,25 +273,6 @@ document.getElementById('resBinBC').innerHTML=bcBinary;
 document.getElementById('resClass').innerHTML=standartClass;
 }else{
 alert("invalid value");
-}
-
-// Tambahkan fungsi baru untuk menghasilkan daftar IP untuk setiap subnet
-function generateIPList(q1, q2, q3, q4, cidr) {
-    var ipList = [];
-    var subnetMask = Math.pow(2, 32 - cidr);
-    var currentIP = q1 + "." + q2 + "." + q3 + "." + q4;
-    var startIP = currentIP.split(".");
-    for (var i = 0; i < subnetMask; i++) {
-        ipList.push({
-            network: currentIP,
-            range: currentIP,
-            broadcast: currentIP
-        });
-        startIP[3] = parseInt(startIP[3]) + 1;
-        currentIP = startIP.join(".");
-    }
-    return ipList;
-        }
 }
         </script>
 
