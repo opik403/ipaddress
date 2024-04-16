@@ -90,8 +90,15 @@ if(
 (q4>=0 && q4<=255) &&
 (cidr>=0 && cidr<=32)
 ){
+
 //display IP address
 document.getElementById('resIP').innerHTML=q1 + "." + q2 + "." + q3 + "." + q4;
+
+// calculate total hosts
+var totalHosts = Math.pow(2, 32 - parseInt(cidr, 10)) - 2;
+
+// display total hosts
+document.getElementById('resTotalHosts').innerHTML = totalHosts;
 
 //get IP Address binaries
 var ipBin={};
